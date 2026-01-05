@@ -1,15 +1,15 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<{ courseId: string }> }
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = await auth();
-    const { courseId } = await params;
+    const { userId } = auth();
+    const { courseId } = params;
     const values = await req.json();
 
     if (!userId) {
@@ -28,7 +28,7 @@ export async function PATCH(
 
     return NextResponse.json(course);
   } catch (error) {
-    console.log("[COURSE_ID_PATCH]", error);
+    console.log("[COURSE_ID]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
